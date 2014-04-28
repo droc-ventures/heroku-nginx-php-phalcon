@@ -1,9 +1,10 @@
 Heroku Buildpack (Nginx + PHP + Phalcon)
-========================
+----------------------------------
 Buildpack Stack:
 * Nginx 1.5.13
 * PHP-FPM 5.5.11
 * MCrypt 2.5.8
+* PCRE 8.35
 * Phalcon (Latest)
 * MongoDB PHP Driver (latest)
 
@@ -75,3 +76,33 @@ Once the packages are created, use the ```scp``` command to get them off the dyn
 scp /tmp/php-5.5.11.tar.gz username@server:
 scp /tmp/mcrypt-2.5.8.tar.gz username@server:
 ```
+Compile and Package Nginx
+----------------------------------
+This script should be excuted via the terminal ```heroku run bash --app=app-name```.
+```
+# set starting point
+cd ~
+
+# vendor nginx
+curl -L http://nginx.org/download/nginx-1.5.13.tar.gz | tar xzv
+cd nginx-*
+curl -L http://garr.dl.sourceforge.net/project/pcre/pcre/8.35/pcre-8.35.tar.bz2 | tar xvj
+./configure \
+	--prefix=/app/vendor/nginx \
+	--with-pcre=pcre-8.35 \
+	--with-http_ssl_module \
+	--with-http_gzip_static_module \
+	--with-http_stub_status_module \
+	--with-http_realip_module
+make install
+
+# package php
+cd /app/vendor/php && tar cvzf /tmp/nginx-1.5.13.tar.gz .
+```
+Once the package is created, use the ```scp``` command to get it off the dyno.
+```
+scp /tmp/nginx-1.5.13.tar.gz username@server:
+```
+Note
+----
+To make our lives easier when we built this package, we created a fresh dyno ```heroku create``` and then terminal into it via ```heroku run bash --app=app-name```.
