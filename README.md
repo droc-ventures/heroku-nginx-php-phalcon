@@ -76,6 +76,7 @@ Once the packages are created, use the ```scp``` command to get them off the dyn
 scp /tmp/php-5.5.11.tar.gz username@server:
 scp /tmp/mcrypt-2.5.8.tar.gz username@server:
 ```
+
 Compile and Package Nginx
 ----------------------------------
 This script should be excuted via the terminal ```heroku run bash --app=app-name```.
@@ -103,11 +104,17 @@ Once the package is created, use the ```scp``` command to get it off the dyno.
 ```
 scp /tmp/nginx-1.5.13.tar.gz username@server:
 ```
+
 Note
 ----
 To make our lives easier when we built this package, we created a fresh dyno ```heroku create``` and then terminal into it via ```heroku run bash --app=app-name```.
+
 Sample Project
 --------------
 Check out our sample project for this buildpack. It includes everything you need to test your installation and can be used as a reference for your project. Enjoy!
 
 https://github.com/droc-ventures/heroku-nginx-php-phalcon-sample
+
+Inspiration and Credit
+----------------------
+The wordpress buildpack [@mchung](https://github.com/mchung) created provided some valuable insight for this buildpack.
