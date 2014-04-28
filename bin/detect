@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+if [ ! -f $1/public/index.php ]
+  then echo "No" && exit 1
+  else echo "No Dice" && exit 0
+fi

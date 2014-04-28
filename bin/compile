@@ -1,0 +1,89 @@
+#!/usr/bin/env bash
+# bin/compile <build-dir> <cache-dir>
+
+set -e
+set -o pipefail
+
+# binary versions
+PHP_VERSION=5.5.11
+NGINX_VERSION=1.5.13
+MCRYPT_VERSION=2.5.8
+
+# binaries
+# caution: we don't mind hosting these files, but there is no guarantee the urls will not change.
+PHP_URL="https://s3.amazonaws.com/drocventures-com/heroku/php-${PHP_VERSION}.tar.gz"
+NGINX_URL="https://s3.amazonaws.com/drocventures-com/heroku/nginx-${NGINX_VERSION}.tar.gz"
+MCRYPT_URL="https://s3.amazonaws.com/drocventures-com/heroku/mcrypt-${MCRYPT_VERSION}.tar.gz"
+
+# arguments
+BUILD_DIR=$1
+CACHE_DIR=$2
+
+# ensure the directories exist
+mkdir -p $BUILD_DIR $CACHE_DIR && cd ${BUILD_DIR}
+
+# move app to www
+mkdir -p $CACHE_DIR/www
+mv -- * $CACHE_DIR/www
+mv $CACHE_DIR/www .
+
+# keep procfile
+if [ -f www/Procfile ]; then
+	mv www/Procfile .
+fi
+
+# keep conf directory
+if [ -d www/conf ]; then
+	mv www/conf .
+fi
+
+# install nginx
+cd ${BUILD_DIR}
+if [ ! -d ./vendor/nginx ]; then
+	echo "-----> Installing Nginx ${NGINX_VERSION}"
+	mkdir -p ./vendor/nginx && cd ./vendor/nginx
+	curl --silent --max-time 60 --location $NGINX_URL | tar xz
+fi
+
+# install mcrypt
+cd ${BUILD_DIR}
+if [ ! -d ./vendor/mcrypt ]; then
+	echo "-----> Installing MCRYPT ${MCRYPT_VERSION}"
+	mkdir -p ./vendor/mcrypt && cd ./vendor/mcrypt
+	curl --silent --max-time 60 --location $MCRYPT_URL | tar xz
+fi
+
+# install php-fpm
+cd ${BUILD_DIR}
+if [ ! -d ./vendor/php ]; then
+	echo "-----> Installing PHP ${PHP_VERSION}"
+	mkdir -p ./vendor/php && cd ./vendor/php
+	curl --silent --max-time 60 --location $PHP_URL | tar xz
+fi
+
+# create boot.sh
+echo "-----> Creating boot.sh Script"
+mkdir -p ${BUILD_DIR}/bin && cd ${BUILD_DIR}
+
+cat >>bin/boot.sh <<EOF
+#!/usr/bin/env bash
+
+# copy configurations
+cp -rf /app/conf/* /app
+erb /app/vendor/nginx/conf/server.conf.erb > /app/vendor/nginx/conf/server.conf
+
+# write heroku values to php-fpm
+for var in \`env | cut -f1 -d=\`; do
+	echo "env[\$var] = \\$\${var}" >> /app/vendor/php/etc/php-fpm.conf
+done
+
+touch /app/vendor/nginx/logs/access.log /app/vendor/nginx/logs/error.log /app/vendor/php/var/log/php-fpm.log
+(tail -qF -n 0 /app/vendor/nginx/logs/*.log /app/vendor/php/var/log/*.log &)
+
+echo "-----> Starting Processes"
+php-fpm
+nginx
+EOF
+chmod +x bin/boot.sh
+
+echo "-----> Installation Complete"
