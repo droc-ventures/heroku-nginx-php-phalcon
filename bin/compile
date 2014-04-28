@@ -4,12 +4,12 @@
 set -e
 set -o pipefail
 
-# binary versions
+# package versions
 PHP_VERSION=5.5.11
 NGINX_VERSION=1.5.13
 MCRYPT_VERSION=2.5.8
 
-# binaries
+# package urls
 # caution: we don't mind hosting these files, but there is no guarantee the urls will not change.
 PHP_URL="https://s3.amazonaws.com/drocventures-com/heroku/php-${PHP_VERSION}.tar.gz"
 NGINX_URL="https://s3.amazonaws.com/drocventures-com/heroku/nginx-${NGINX_VERSION}.tar.gz"
