@@ -6,7 +6,7 @@ Buildpack Stack:
 * MCrypt 2.5.8
 * PCRE 8.35
 * Phalcon (Latest)
-* MongoDB PHP Driver (latest)
+* MongoDB PHP Driver (Latest)
 
 Compile and Package PHP and MCrypt
 ----------------------------------
