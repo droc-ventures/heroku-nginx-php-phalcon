@@ -106,3 +106,8 @@ scp /tmp/nginx-1.5.13.tar.gz username@server:
 Note
 ----
 To make our lives easier when we built this package, we created a fresh dyno ```heroku create``` and then terminal into it via ```heroku run bash --app=app-name```.
+Sample Project
+--------------
+Check out our sample project for this buildpack. It includes everything you need to test your installation and can be used as a reference for your project. Enjoy!
+
+https://github.com/droc-ventures/heroku-nginx-php-phalcon-sample
