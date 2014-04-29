@@ -2,5 +2,5 @@
 
 if [ ! -f $1/public/index.php ]
   then echo "No" && exit 1
-  else echo "Looking Good" && exit 0
+  else echo "heroku-nginx-php-phalcon" && exit 0
 fi
