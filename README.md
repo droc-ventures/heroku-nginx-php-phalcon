@@ -29,26 +29,18 @@ cd ~
 curl -L http://us1.php.net/get/php-5.5.11.tar.gz/from/this/mirror | tar xzv
 cd php-*
 ./configure \
-	--prefix=/app/vendor/php \
-	--with-mysql \
-	--with-pdo-mysql \
-	--with-pgsql \
-	--with-pdo-pgsql \
-	--with-iconv \
-	--with-gd \
-	--with-openssl \
-	--with-config-file-path=/app/vendor/php \
-	--with-mcrypt=/app/vendor/mcrypt \
-	--enable-mbstring \
-	--enable-opcache \
-	--enable-fpm \
-	--enable-sockets \
-	--enable-soap=shared
+    --prefix=/app/vendor/php \
+    --with-iconv \
+    --with-gd \
+    --with-openssl \
+    --with-curl \
+    --with-config-file-path=/app/vendor/php \
+    --with-mcrypt=/app/vendor/mcrypt \
+    --enable-mbstring \
+    --enable-opcache \
+    --enable-fpm \
+    --enable-sockets
 make && make install
-
-# copy mysql into php directory
-mkdir -p /app/vendor/php/lib/php
-cp /usr/lib/libmysqlclient.so.16 /app/vendor/php/lib/php
 
 # set php path
 export PATH=/app/vendor/php/bin:$PATH
