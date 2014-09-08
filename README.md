@@ -1,7 +1,7 @@
 Heroku Buildpack (Nginx + PHP + Phalcon)
 ----------------------------------
 Buildpack Stack:
-* Nginx 1.5.13
+* Nginx 1.6.1 (w/ Google Pagespeed 1.8.31.4)
 * PHP-FPM 5.5.11
 * MCrypt 2.5.8
 * PCRE 8.35
@@ -77,24 +77,32 @@ This script should be excuted via the terminal ```heroku run bash --app=app-name
 cd ~
 
 # vendor nginx
-curl -L http://nginx.org/download/nginx-1.5.13.tar.gz | tar xzv
-cd nginx-*
+curl -L http://nginx.org/download/nginx-1.6.1.tar.gz | tar xzv
+cd ~/nginx-*
 curl -L http://garr.dl.sourceforge.net/project/pcre/pcre/8.35/pcre-8.35.tar.bz2 | tar xvj
+curl -L http://drocventures.s3.amazonaws.com/heroku/buildpacks/pagespeed-1.8.31.4.tar.gz | tar xzv
+cd ngx_pagespeed-release-*
+curl -L https://dl.google.com/dl/page-speed/psol/1.8.31.4.tar.gz | tar xzv
+cd ~/nginx-*
 ./configure \
-	--prefix=/app/vendor/nginx \
-	--with-pcre=pcre-8.35 \
-	--with-http_ssl_module \
-	--with-http_gzip_static_module \
-	--with-http_stub_status_module \
-	--with-http_realip_module
+    --prefix=/app/vendor/nginx \
+    --with-pcre=pcre-8.35 \
+    --with-http_ssl_module \
+    --with-http_gzip_static_module \
+    --with-http_stub_status_module \
+    --with-http_realip_module \
+    --add-module=ngx_pagespeed-release-1.8.31.4-beta
 make install
 
-# package php
-cd /app/vendor/php && tar cvzf /tmp/nginx-1.5.13.tar.gz .
+# package nginx
+cd /app/vendor/nginx && tar cvzf /tmp/nginx-1.6.1.tar.gz .
 ```
-Once the package is created, use the ```scp``` command to get it off the dyno.
+Once the package is created, execute the following commands to download it from the dyno.
 ```
-scp /tmp/nginx-1.5.13.tar.gz username@server:
+cd /tmp/
+curl https://raw.githubusercontent.com/scottmotte/srvdir-binary/master/srvdir.tar.gz -O -ssl3
+tar -zxvf srvdir.tar.gz
+./srvdir
 ```
 
 Note
@@ -106,7 +114,3 @@ Sample Project
 Check out our sample project for this buildpack. It includes everything you need to test your installation and can be used as a reference for your project. Enjoy!
 
 https://github.com/droc-ventures/heroku-nginx-php-phalcon-sample
-
-Inspiration and Credit
-----------------------
-The wordpress buildpack [@mchung](https://github.com/mchung) created provided some valuable insight for this buildpack.
