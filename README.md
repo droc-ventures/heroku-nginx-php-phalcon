@@ -63,10 +63,12 @@ cd /app/vendor/php && tar cvzf /tmp/php-5.5.11.tar.gz .
 # package mcrypt
 cd /app/vendor/mcrypt && tar cvzf /tmp/mcrypt-2.5.8.tar.gz .
 ```
-Once the packages are created, use the ```scp``` command to get them off the dyno.
+Once the packages are created, execute the following commands to download them from the dyno.
 ```
-scp /tmp/php-5.5.11.tar.gz username@server:
-scp /tmp/mcrypt-2.5.8.tar.gz username@server:
+cd /tmp/
+curl https://raw.githubusercontent.com/scottmotte/srvdir-binary/master/srvdir.tar.gz -O -ssl3
+tar -zxvf srvdir.tar.gz
+./srvdir
 ```
 
 Compile and Package Nginx
