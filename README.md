@@ -2,7 +2,7 @@ Heroku Buildpack (Nginx + PHP + Phalcon)
 ----------------------------------
 Buildpack Stack:
 * Nginx 1.6.1 (w/ Google Pagespeed 1.8.31.4)
-* PHP-FPM 5.5.11
+* PHP-FPM 5.5.17
 * MCrypt 2.5.8
 * PCRE 8.35
 * Phalcon (Latest)
@@ -26,7 +26,7 @@ make && make install
 
 # vendor php
 cd ~
-curl -L http://us1.php.net/get/php-5.5.11.tar.gz/from/this/mirror | tar xzv
+curl -L http://us1.php.net/get/php-5.5.17.tar.gz/from/this/mirror | tar xzv
 cd php-*
 ./configure \
     --prefix=/app/vendor/php \
@@ -58,7 +58,7 @@ cd cphalcon/build
 ./install
 
 # package php
-cd /app/vendor/php && tar cvzf /tmp/php-5.5.11.tar.gz .
+cd /app/vendor/php && tar cvzf /tmp/php-5.5.17.tar.gz .
 
 # package mcrypt
 cd /app/vendor/mcrypt && tar cvzf /tmp/mcrypt-2.5.8.tar.gz .
