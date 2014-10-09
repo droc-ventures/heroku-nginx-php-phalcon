@@ -5,13 +5,13 @@ set -e
 set -o pipefail
 
 # package versions
-PHP_VERSION=5.5.17
+PHP_VERSION=5.5.11
 NGINX_VERSION=1.6.1
 MCRYPT_VERSION=2.5.8
 
 # package urls
 # caution: we don't mind hosting these files, but there is no guarantee the urls will not change.
-PHP_URL="https://s3.amazonaws.com/drocventures/heroku/buildpacks/php-${PHP_VERSION}-phalcon-1.3.3.tar.gz"
+PHP_URL="https://s3.amazonaws.com/drocventures/heroku/buildpacks/php-${PHP_VERSION}.tar.gz"
 NGINX_URL="https://s3.amazonaws.com/drocventures/heroku/buildpacks/nginx-${NGINX_VERSION}.tar.gz"
 MCRYPT_URL="https://s3.amazonaws.com/drocventures/heroku/buildpacks/mcrypt-${MCRYPT_VERSION}.tar.gz"
 
