@@ -2,11 +2,12 @@ Heroku Buildpack (Nginx + PHP + Phalcon)
 ----------------------------------
 Buildpack Stack:
 * Nginx 1.6.1 (w/ Google Pagespeed 1.8.31.4)
-* PHP-FPM 5.5.17
+* PHP-FPM 5.5.14
 * MCrypt 2.5.8
 * PCRE 8.35
-* Phalcon (Latest)
+* Phalcon PHP (Latest)
 * MongoDB PHP Driver (Latest)
+* Redis PHP Driver (Latest)
 
 Compile and Package PHP and MCrypt
 ----------------------------------
@@ -26,7 +27,7 @@ make && make install
 
 # vendor php
 cd ~
-curl -L http://us1.php.net/get/php-5.5.17.tar.gz/from/this/mirror | tar xzv
+curl -L http://us1.php.net/get/php-5.5.14.tar.gz/from/this/mirror | tar xzv
 cd php-*
 ./configure \
     --prefix=/app/vendor/php \
@@ -51,14 +52,17 @@ export PATH=/app/vendor/php/bin:$PATH
 # install mongo pecl extension
 /app/vendor/php/bin/pecl install mongo
 
-# compile and install phalcon
+# install redis pecl extension
+/app/vendor/php/bin/pecl install redis
+
+# compile and install the latest version of phalcon
 mkdir -p /app/tmp && cd /app/tmp
 git clone --depth=1 git://github.com/phalcon/cphalcon.git
 cd cphalcon/build
 ./install
 
 # package php
-cd /app/vendor/php && tar cvzf /tmp/php-5.5.17.tar.gz .
+cd /app/vendor/php && tar cvzf /tmp/php-5.5.14.tar.gz .
 
 # package mcrypt
 cd /app/vendor/mcrypt && tar cvzf /tmp/mcrypt-2.5.8.tar.gz .
